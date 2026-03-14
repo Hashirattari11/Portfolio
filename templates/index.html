@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Hashir Attari — AI Engineer & Data Scientist{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="grid-overlay"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span>
+      Available for Opportunities
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line-1 anim-line">Hello, I'm</span>
+      <span class="line-2 anim-line gradient-text">Hashir Attari</span>
+      <span class="line-3 anim-line typed-wrap">
+        <span id="typed"></span><span class="cursor-blink">|</span>
+      </span>
+    </h1>
+
+    <p class="hero-sub anim-fade">
+      Building intelligent systems at the intersection of machine learning,
+      deep learning, and full-stack development. Turning raw data into
+      deployed, impactful products.
+    </p>
+
+    <div class="hero-chips anim-fade">
+      <span class="chip">TensorFlow</span>
+      <span class="chip">Deep Learning</span>
+      <span class="chip">NLP</span>
+      <span class="chip">Python</span>
+      <span class="chip">SQL</span>
+      <span class="chip">CI/CD</span>
+    </div>
+
+    <div class="hero-cta anim-fade">
+      <a href="/projects" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        View Projects
+      </a>
+      <a href="/contact" class="btn btn-ghost">Contact Me →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="code-card">
+      <div class="code-header">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="code-filename">hashir.py</span>
+      </div>
+      <pre class="code-body"><span class="kw">class</span> <span class="cls">HashirAttari</span>:
+    role    = <span class="str">"AI Engineer"</span>
+    passion = <span class="str">"Deep Learning"</span>
+    status  = <span class="str">"Building cool stuff"</span>
+
+    skills = [
+        <span class="str">"Machine Learning"</span>,
+        <span class="str">"NLP"</span>, <span class="str">"TensorFlow"</span>,
+        <span class="str">"Data Science"</span>, <span class="str">"SQL"</span>,
+        <span class="str">"CI/CD"</span>, <span class="str">"Frontend"</span>
+    ]
+
+    <span class="kw">def</span> <span class="fn">mission</span>(self):
+        <span class="kw">return</span> <span class="str">"Turn data → impact"</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="4">0</div>
+        <div class="stat-label">Deployed Projects</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="12">0</div>
+        <div class="stat-label">Technologies</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="3">0</div>
+        <div class="stat-label">Live Platforms</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num" data-target="100" data-suffix="%">0</div>
+        <div class="stat-label">Passion for AI</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Typewriter
+const phrases = ["AI Engineer", "Data Scientist", "ML Developer", "Deep Learning Builder", "NLP Enthusiast"];
+let pi = 0, ci = 0, del = false;
+const el = document.getElementById('typed');
+function type() {
+  const phrase = phrases[pi];
+  if (!del) {
+    el.textContent = phrase.slice(0, ++ci);
+    if (ci === phrase.length) { del = true; setTimeout(type, 1800); return; }
+  } else {
+    el.textContent = phrase.slice(0, --ci);
+    if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
+  }
+  setTimeout(type, del ? 55 : 90);
+}
+type();
+
+// Counter animation
+function animateCounter(el) {
+  const target = +el.dataset.target;
+  const suffix = el.dataset.suffix || '+';
+  let cur = 0;
+  const step = Math.ceil(target / 40);
+  const t = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = cur + suffix;
+    if (cur >= target) clearInterval(t);
+  }, 40);
+}
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); obs.unobserve(e.target); } });
+}, {threshold: 0.5});
+document.querySelectorAll('.stat-num').forEach(n => obs.observe(n));
+</script>
+{% endblock %}

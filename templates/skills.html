@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Skills — Hashir Attari{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-label">Expertise</div>
+    <h1 class="page-hero-title">Skills &amp;<br><span class="gradient-text">Technologies</span></h1>
+    <p class="page-hero-desc">A full-stack AI skill set — from raw data to deployed models.</p>
+  </div>
+</section>
+
+<section class="skills-section">
+  <div class="container">
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs reveal">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="AI/ML">AI / ML</button>
+      <button class="filter-btn" data-cat="Languages">Languages</button>
+      <button class="filter-btn" data-cat="Frameworks">Frameworks</button>
+      <button class="filter-btn" data-cat="Databases">Databases</button>
+      <button class="filter-btn" data-cat="Web">Web</button>
+      <button class="filter-btn" data-cat="DevOps">DevOps</button>
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="skills-grid" id="skillsGrid">
+      {% for skill in skills %}
+      <div class="skill-card reveal" data-cat="{{ skill.category }}">
+        <div class="skill-top">
+          <div class="skill-icon">{{ skill.icon }}</div>
+          <div class="skill-pct">{{ skill.level }}%</div>
+        </div>
+        <div class="skill-name">{{ skill.name }}</div>
+        <div class="skill-cat">{{ skill.category }}</div>
+        <div class="skill-bar-wrap">
+          <div class="skill-bar" data-width="{{ skill.level }}" style="width:0"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Tools strip -->
+<section class="tools-strip">
+  <div class="container">
+    <div class="tools-label reveal">Also comfortable with</div>
+    <div class="tools-row reveal">
+      {% set tools = ["scikit-learn","Keras","Matplotlib","Seaborn","FastAPI","Flask","Git","VS Code","Jupyter","Streamlit","Vercel","Railway"] %}
+      {% for t in tools %}
+      <span class="tool-chip">{{ t }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Filter tabs
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('.skill-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = '';
+        setTimeout(() => card.style.opacity = '1', 10);
+      } else {
+        card.style.opacity = '0';
+        setTimeout(() => card.style.display = 'none', 200);
+      }
+    });
+  });
+});
+
+// Skill bars on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const bar = e.target.querySelector('.skill-bar');
+      if (bar) bar.style.width = bar.dataset.width + '%';
+      obs.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.2});
+document.querySelectorAll('.skill-card').forEach(c => obs.observe(c));
+</script>
+{% endblock %}
