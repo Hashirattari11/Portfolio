@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
@@ -9,19 +9,18 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # ── Email config ────────────────────────────────────────────────────────────
-# Set these as environment variables OR replace the strings directly for local testing
-GMAIL_USER     = os.getenv("GMAIL_USER", "hashirattari73@gmail.com")   # your Gmail
-GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD", "aefi cwfd qigx pkmn") # Gmail App Password
-NOTIFY_EMAIL   = "hashirattari73@gmail.com"  # where to receive messages
+GMAIL_USER     = os.getenv("GMAIL_USER", "hashirattari73@gmail.com")
+GMAIL_PASSWORD = os.getenv("GMAIL_PASSWORD", "aefi cwfd qigx pkmn")
+NOTIFY_EMAIL   = "hashirattari73@gmail.com"
 
 
 def send_email(name: str, sender_email: str, subject: str, message: str) -> bool:
     """Send contact form submission to Hashir's Gmail."""
     try:
         msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"Portfolio Contact: {subject}"
-        msg["From"]    = GMAIL_USER
-        msg["To"]      = NOTIFY_EMAIL
+        msg["Subject"]  = f"Portfolio Contact: {subject}"
+        msg["From"]     = GMAIL_USER
+        msg["To"]       = NOTIFY_EMAIL
         msg["Reply-To"] = sender_email
 
         html_body = f"""
@@ -66,31 +65,32 @@ def send_email(name: str, sender_email: str, subject: str, message: str) -> bool
         print(f"[Email Error] {e}")
         return False
 
+
 app = FastAPI(title="Hashir Attari Portfolio")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 SKILLS = [
-    {"name": "Artificial Intelligence",        "icon": "🤖", "level": 88, "category": "AI/ML"},
-    {"name": "Machine Learning",               "icon": "📊", "level": 90, "category": "AI/ML"},
-    {"name": "Deep Learning",                  "icon": "🧠", "level": 85, "category": "AI/ML"},
-    {"name": "Natural Language Processing",    "icon": "💬", "level": 80, "category": "AI/ML"},
-    {"name": "TensorFlow",                     "icon": "⚡", "level": 85, "category": "Frameworks"},
-    {"name": "Keras",                          "icon": "🔥", "level": 83, "category": "Frameworks"},
-    {"name": "Scikit-Learn",                   "icon": "🔬", "level": 88, "category": "Frameworks"},
-    {"name": "MobileNetV2 / Transfer Learning","icon": "🖼️", "level": 80, "category": "Frameworks"},
-    {"name": "Python",                         "icon": "🐍", "level": 93, "category": "Languages"},
-    {"name": "JavaScript",                     "icon": "🌐", "level": 75, "category": "Languages"},
-    {"name": "HTML / CSS",                     "icon": "🎨", "level": 78, "category": "Languages"},
-    {"name": "Pandas",                         "icon": "🐼", "level": 91, "category": "Data Science"},
-    {"name": "NumPy",                          "icon": "🔢", "level": 89, "category": "Data Science"},
-    {"name": "SQL",                            "icon": "🗄️", "level": 78, "category": "Data Science"},
-    {"name": "Data Visualization",             "icon": "📈", "level": 82, "category": "Data Science"},
-    {"name": "Django",                         "icon": "🦄", "level": 72, "category": "Web"},
-    {"name": "Frontend Development",           "icon": "💻", "level": 75, "category": "Web"},
-    {"name": "CI/CD",                          "icon": "⚙️", "level": 74, "category": "DevOps"},
-    {"name": "Netlify / Vercel / Railway",     "icon": "🚀", "level": 82, "category": "DevOps"},
+    {"name": "Artificial Intelligence",         "icon": "🤖", "level": 88, "category": "AI/ML"},
+    {"name": "Machine Learning",                "icon": "📊", "level": 90, "category": "AI/ML"},
+    {"name": "Deep Learning",                   "icon": "🧠", "level": 85, "category": "AI/ML"},
+    {"name": "Natural Language Processing",     "icon": "💬", "level": 80, "category": "AI/ML"},
+    {"name": "TensorFlow",                      "icon": "⚡", "level": 85, "category": "Frameworks"},
+    {"name": "Keras",                           "icon": "🔥", "level": 83, "category": "Frameworks"},
+    {"name": "Scikit-Learn",                    "icon": "🔬", "level": 88, "category": "Frameworks"},
+    {"name": "MobileNetV2 / Transfer Learning", "icon": "🖼️", "level": 80, "category": "Frameworks"},
+    {"name": "Python",                          "icon": "🐍", "level": 93, "category": "Languages"},
+    {"name": "JavaScript",                      "icon": "🌐", "level": 75, "category": "Languages"},
+    {"name": "HTML / CSS",                      "icon": "🎨", "level": 78, "category": "Languages"},
+    {"name": "Pandas",                          "icon": "🐼", "level": 91, "category": "Data Science"},
+    {"name": "NumPy",                           "icon": "🔢", "level": 89, "category": "Data Science"},
+    {"name": "SQL",                             "icon": "🗄️", "level": 78, "category": "Data Science"},
+    {"name": "Data Visualization",              "icon": "📈", "level": 82, "category": "Data Science"},
+    {"name": "Django",                          "icon": "🦄", "level": 72, "category": "Web"},
+    {"name": "Frontend Development",            "icon": "💻", "level": 75, "category": "Web"},
+    {"name": "CI/CD",                           "icon": "⚙️", "level": 74, "category": "DevOps"},
+    {"name": "Netlify / Vercel / Railway",      "icon": "🚀", "level": 82, "category": "DevOps"},
 ]
 
 PROJECTS = [
@@ -170,6 +170,7 @@ PROJECTS = [
 
 messages_store = []
 
+
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "page": "home"})
@@ -205,20 +206,11 @@ async def submit_contact(
             "message": f"Thanks {name}! Your message has been sent — I'll reply to {email} soon. 🚀"
         })
     else:
-        # Still return success to user even if email fails (message is saved in memory)
         return JSONResponse({
             "success": True,
             "message": f"Thanks {name}! Message received. (Note: email notification failed — check Gmail App Password config.)"
         })
 
-@app.get("/download-resume")
-async def download_resume():
-    resume_path = os.path.join("static", "Muhammad_Hashir_Attari_Resume.pdf")
-    return FileResponse(
-        path=resume_path,
-        filename="Muhammad_Hashir_Attari_Resume.pdf",
-        media_type="application/pdf"
-    )
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
